@@ -62,12 +62,12 @@ observables = ['centrality','rho','jet_index','jet_pt','jet_area','jet_neutral_f
     'jet_subleading_track_pt','jet_subleading_track_charge']
 
 df_mb_array = []
-#filepath = '/star/data01/scratch/youqi/output/data/'
+filepath = '/gpfs/gibbs/project/havener/ys668/other_output/rc/isobar/mb_day118/'
 njet = 0
-files = ['/gpfs/gibbs/project/havener/ys668/other_output/rc/isobar/mb_day118.root']#os.listdir(filepath)
+files = os.listdir(filepath)
 for filename in files:
     print('reading in file', filename)
-    df_temp = applyCut(getData(observables, filename, "jet_tree"), \
+    df_temp = applyCut(getData(observables, filepath+filename, "jet_tree"), \
                  'jet_pt > 15 and jet_subleading_track_pt > 0 and jet_neutral_fraction < 0.9')
     df_mb_array.append(df_temp)
     print('read in', df_temp.shape[0], 'jets')
@@ -76,6 +76,9 @@ for filename in files:
     #    break
 df_mb = pd.concat([df for df in df_mb_array])
 print('total number of jets: ', df_mb.shape[0])
+
+print('number of jets with jet_random_track1_charge == -1:', df_mb[df_mb.jet_random_track1_charge==-1].shape[0])
+print('number of jets with jet_random_track1_charge == +1:', df_mb[df_mb.jet_random_track1_charge==+1].shape[0])
 
 df_mb.eval('b_ch = jet_leading_track_charge * jet_subleading_track_charge', inplace=True) 
 df_mb.eval('b = jet_random_track1_charge * jet_random_track2_charge', inplace=True)
