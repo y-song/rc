@@ -92,8 +92,8 @@ df_allreco['distance1'] = np.sqrt(
 df_allreco['distance2'] = np.sqrt(
     delta_phi(df_allreco['phi2'].values, df_allreco['phi2s'].values)**2
     + (df_allreco['y2'].values - df_allreco['y2s'].values)**2)
-df_match   = df_allreco.query('pt!=-9 and b!=-9 and distance1<0.03 and distance2<0.03')
-df_allfake = df_allreco.query('pt==-9 or b==-9 or distance1>0.03 or distance2>0.03')
+df_match   = df_allreco.query('pt!=-9 and b!=-9 and distance1<0.02 and distance2<0.02')
+df_allfake = df_allreco.query('pt==-9 or b==-9 or distance1>0.02 or distance2>0.02')
 
 df_allreco_pts = bin_df_in_pts(df_allreco)
 df_match_pts   = bin_df_in_pts(df_match)
@@ -130,7 +130,7 @@ for df_m in df_match_pts:
     b_match_err_array.append(np.array([np.sqrt(p * q) * sqrt_n_over_n] * 2))
 
 matched_mask = ((df_allreco.pt != -9) & (df_allreco.b != -9) &
-                (df_allreco.distance1 < 0.03) & (df_allreco.distance2 < 0.03))
+                (df_allreco.distance1 < 0.02) & (df_allreco.distance2 < 0.02))
 match_fake, _ = np.histogram(df_allreco['pts'],               bins=PT_EDGES, weights=df_allreco['ws'])
 match, _      = np.histogram(df_allreco[matched_mask]['pts'], bins=PT_EDGES, weights=df_allreco[matched_mask]['ws'])
 fake_rate_array = 1 - match / match_fake
